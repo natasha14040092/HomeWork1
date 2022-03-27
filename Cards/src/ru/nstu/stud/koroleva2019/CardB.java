@@ -1,55 +1,54 @@
 package ru.nstu.stud.koroleva2019;
 
-public class CardB implements Comparable<CardB>{
+public class CardB implements Comparable<CardB> {
     private final int rank;
     private static final int MAX_STANDARD_RANK = 15;
     private final Suits suit;
 
-    CardB(){
+    CardB() {
         rank = 2;
         suit = Suits.clubs;
     }
 
-    CardB(int rank, int suit){
-        this.suit = enterSuit(suit);
-        if((this.suit == Suits.blackJoker) || (this.suit == Suits.redJoker))
-            this.rank = 15;
-        else this.rank = enterRank(rank);
-    }
-
-    CardB(int rank, Suits suit){
+    CardB(int rank, Suits suit) {
         this.suit = suit;
-        if((this.suit == Suits.blackJoker) || (this.suit == Suits.redJoker))
-            this.rank = 15;
-        else this.rank = enterRank(rank);
+        this.rank = getValidRank(rank);
     }
 
+    CardB(int rank, int suit) {
+        this(rank, enterSuit(suit));
+    }
 
-    public int getRankInt(){
+    private int getValidRank(int rank) {
+        if ((this.suit == Suits.blackJoker) || (this.suit == Suits.redJoker)) return 15;
+        else return enterRank(rank);
+    }
+
+    public int getRankInt() {
         return rank;
     }
 
-    public String getStringRank(){
+    public String getStringRank() {
         return toStringRank();
     }
 
 
-    public int getSuitsInt(){
+    public int getSuitsInt() {
         return suit.ordinal();
     }
 
-    public Suits getSuits(){
+    public Suits getSuits() {
         return suit;
     }
 
 
-    public String toString(){
-        return getStringRank() + suit ;
+    public String toString() {
+        return getStringRank() + suit;
     }
 
 
-    public void printCard(){
-        System.out.println(getStringRank()  + suit);
+    public void printCard() {
+        System.out.println(getStringRank() + suit);
     }
 
 
@@ -72,49 +71,41 @@ public class CardB implements Comparable<CardB>{
     }
 
 
-    public static boolean isStandardDeck(CardB card){
-        if (card == null)
-            return false;
-        return (card.rank>=2) && (card.rank<=MAX_STANDARD_RANK);
+    public static boolean isStandardDeck(CardB card) {
+        return (card != null) && (card.rank >= 2) && (card.rank <= MAX_STANDARD_RANK);
     }
 
-    public boolean isStronger(CardB card){
-        if (card == null)
-            return false;
-        return (this.suit == card.suit) && (this.rank > card.rank);
+    public boolean isStronger(CardB card) {
+        return (card != null) && (this.suit == card.suit) && (this.rank > card.rank);
     }
 
     @Override
     public int compareTo(CardB o) {
         //clubs < diamonds < spades < hearts
         if (o == null) return -1;
-        if (rank - o.rank == 0)
-            return (suit.ordinal() - o.suit.ordinal());
-        return (rank - o.rank);
+        return (rank - o.rank == 0) ? (suit.ordinal() - o.suit.ordinal()) : (rank - o.rank);
     }
 
     public static int compare(CardB card1, CardB card2) {
-        if ((card1 == null)||(card2 == null)) return -1;
-        if (card1.rank - card2.rank == 0)
-            return (card1.suit.ordinal() - card2.suit.ordinal());
-        return (card1.rank - card2.rank);
+        if ((card1 == null) || (card2 == null)) return -1;
+        return (card1.rank - card2.rank == 0) ?
+                (card1.suit.ordinal() - card2.suit.ordinal()) : (card1.rank - card2.rank);
     }
 
 
-    private int enterRank(int rank){
+    private int enterRank(int rank) {
         int enterRank = rank;
 
-        if ((rank <= 0)){
-            System.out.format("\nYour rank number: %d,\n" +
-                    "The entered rank number must be > 0.\n" +
-                    "Rank 2 is selected.\n", rank);
+        // не буду сюда все-таки добавлять проверку на MAX_RANK = 15,
+        // потому што не понимаю, в чем тогда смысл метода isStandartDeck()....
+        if (rank <= 0) {
+            System.out.format("\nYour rank number: %d,\n" + "The entered rank number must be > 0.\n" + "Rank 2 is selected.\n", rank);
             enterRank = 2;
         }
-
         return enterRank;
     }
 
-    private Suits enterSuit(int suit){
+    private static Suits enterSuit(int suit) {
         Suits enterSuit;
         switch (suit) {
             case 0:
@@ -145,7 +136,7 @@ public class CardB implements Comparable<CardB>{
         return enterSuit;
     }
 
-    private String toStringRank(){
+    private String toStringRank() {
         String strRank;
 
         switch (rank) {
@@ -169,5 +160,4 @@ public class CardB implements Comparable<CardB>{
         }
         return strRank;
     }
-
 }
