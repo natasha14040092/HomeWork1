@@ -1,8 +1,8 @@
 package ru.nstu.stud.koroleva2019;
 
 public class CardB implements Comparable<CardB> {
-    private final int rank;
     private static final int MAX_STANDARD_RANK = 15;
+    private final int rank;
     private final Suits suit;
 
     CardB() {
