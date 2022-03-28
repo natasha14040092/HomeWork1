@@ -3,43 +3,48 @@ package ru.nstu.stud.koroleva2019;
 import java.util.ArrayList;
 
 public class Folder extends AbstractFileSystemNode {
-    private final ArrayList<FileSystemNode> children =  new ArrayList<>();
+    private final ArrayList<FileSystemNode> children = new ArrayList<>();
 
-    Folder(){
+    Folder() {
         super();
     }
 
-    Folder(String name){
+    Folder(String name) {
         super(name);
     }
 
-    Folder(String name, FileSystemNode root){
-        super(name, root);
-        ((Folder)root).getChildrenArray().add(this);
-    }
-
-    Folder(String name, FileSystemNode ...  children){
-        super(name);
-
-        for (int i = 0; i < children.length; i++){
-            AbstractFileSystemNode child = (AbstractFileSystemNode)children[i];
-            Folder rootFolder = (Folder) child.getRootNode();
-            if (rootFolder != null) {
-                rootFolder.getChildrenArray().remove(child);
-            }
-
-            child.replace(this);
-            this.children.add(children[i]);
+    Folder(String name, FileSystemNode parent) {
+        super(name, parent);
+        if (this.getParentNode() != null) {
+            ((Folder) parent).getChildrenArray().add(this);
         }
     }
 
-    public ArrayList<FileSystemNode> getChildrenArray(){
+    Folder(String name, FileSystemNode... children) {
+        super(name);
+
+        for (FileSystemNode c : children) {
+            this.children.add(c);
+
+            if ((c.getClass() == File.class) || (c.getClass() == Folder.class)) {
+                AbstractFileSystemNode child = (AbstractFileSystemNode) c;
+                Folder parentFolder = (Folder) child.getParentNode();
+                if (parentFolder != null) {
+                    parentFolder.getChildrenArray().remove(child);
+                }
+
+                child.replace(this);
+            }
+        }
+    }
+
+    public ArrayList<FileSystemNode> getChildrenArray() {
         return children;
     }
 
-    public String getChildrenString(){
+    public String getChildrenString() {
         StringBuilder childrenString = new StringBuilder();
-        for (FileSystemNode child : children){
+        for (FileSystemNode child : children) {
             childrenString.append(child.getName());
             childrenString.append("; ");
         }

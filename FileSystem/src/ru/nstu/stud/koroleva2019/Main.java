@@ -18,6 +18,8 @@ public class Main {
         File file2 = new File("file 2", subFolder3);
         File file3 = new File("file 3.txt", subFolder2);
 
+        FileSystemNode folderInFile = new Folder("folder", file1);
+
         System.out.println();
         System.out.println(file1.getPath());
         System.out.println(file2.getPath());
